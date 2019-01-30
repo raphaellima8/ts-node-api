@@ -5,13 +5,17 @@
       "target": "es6",
       "noImplicitAny": false,
       "moduleResolution": "node",
-      "sourceMap": true,
+      "typeRoots": [
+        "./node_modules/@types"
+      ],
+      "types": [
+        "node"
+      ],
       "outDir": "dist",
       "baseUrl": ".",
       "paths": {
           "*": [
               "node_modules/*",
-              "src/types/*"
           ]
       }
   },
