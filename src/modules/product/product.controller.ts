@@ -3,6 +3,13 @@ import { Request, Response } from 'express';
 import { ProductModel } from './product.model';
 import { Document } from 'mongoose';
 
+interface QueryParams {
+  itemsPerPage: number;
+  skip: number;
+  currentPage: number;
+  searchTerm: { [key: string]: RegExp } | undefined;
+}
+
 export class ProductController {
 
   private readonly DEFAULT_PAGE_SIZE: number = 5;
@@ -15,12 +22,8 @@ export class ProductController {
   }
 
   private async parseResponse(query) {
-    const { itemsPerPage, skip, currentPage } = this.parseParams(query);
-    const amountDocs: number = await Product.countDocuments();
-    const amountPages: number = (amountDocs / itemsPerPage); 
-    const pages = Number.isInteger(amountPages) ? amountPages : Math.round(amountPages) + 1
-    const data: Array<Document> = await Product.find().skip(skip).limit(itemsPerPage);
-    const products: Array<ProductModel> = data.map((document: Document) => new ProductModel(document));
+    const { itemsPerPage, skip, currentPage, searchTerm } = this.parseParams(query);
+    const { pages, amountDocs, products } = await this.execQuery(searchTerm, skip, itemsPerPage);
     return {
       amountDocs,
       itemsPerPage: products.length,
@@ -29,26 +32,38 @@ export class ProductController {
       currentPage
     }
   }
-
-  private parseParams(query): { ['itemsPerPage']: number, ['skip']: number, ['currentPage']: number } {
-    const { limit, page } = query;
+  
+  private parseParams(query): QueryParams {
+    const { limit, page, search } = query;
     let itemsPerPage: number = this.DEFAULT_PAGE_SIZE;
     let skip: number = this.DEFAULT_SKIP_DOCS;
     let currentPage: number = this.DEFAULT_CURRENT_PAGE;
-
+    const searchTerm = search ? { name: new RegExp(search, 'i') } : undefined;
+    
     if (limit) {
-      const parsedLimit = Math.round(parseInt(limit));
+      const parsedLimit = Math.trunc(parseInt(limit));
       itemsPerPage = !Number.isNaN(parsedLimit) ? parsedLimit : itemsPerPage;
-      skip = itemsPerPage;
-    } 
+    }
+
     if (page) {
-      const parsedPageNumber = Math.round(parseInt(page));
+      const parsedPageNumber = Math.trunc(parseInt(page));
       skip = (itemsPerPage * (parsedPageNumber - 1));
       currentPage = parsedPageNumber;
     }
 
     return {
-      itemsPerPage, skip, currentPage
+      itemsPerPage, skip, currentPage, searchTerm
+    }
+  }
+
+  private async execQuery(searchTerm: {[key: string]: RegExp}, skip: number, itemsPerPage: number) {
+    const amountDocs: number = await Product.find(searchTerm).countDocuments();
+    const data: Array<Document> = await Product.find(searchTerm).skip(skip).limit(itemsPerPage);
+    const products: Array<ProductModel> = data.map((document: Document) => new ProductModel(document));
+    const amountPages: number = amountDocs <= itemsPerPage ? 1 : (amountDocs / itemsPerPage);
+    const pages = Number.isInteger(amountPages) ? amountPages : Math.trunc(amountPages) + 1;
+    return {
+      pages, amountDocs, products
     }
   }
 }
