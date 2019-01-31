@@ -1,6 +1,7 @@
 import express, { Request, Response, Application, NextFunction } from 'express';
 import morgan from 'morgan';
 import bodyParser from 'body-parser';
+import ProductRouter from '../modules/product/product.router';
 
 export class CoreModule {
 
@@ -24,9 +25,7 @@ export class CoreModule {
   }
 
   private exposeEndpoints(): void {
-    this.express.route('/api/v1/products').get((req: Request, res: Response) => {
-      res.status(200).send({ message: 'Hello, world!'});
-    });
+    ProductRouter.exposeEndpoints(this.express);
   }
 
   private configHeader(req: Request, res: Response, next: NextFunction) {

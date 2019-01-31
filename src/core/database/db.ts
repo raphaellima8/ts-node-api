@@ -8,12 +8,12 @@ export class Database {
   public connect() {
     const { dbURL } = SettingsHelper.getSettings();
     this.DBURI = SettingsHelper.isDevMode() ? this.DBURI : dbURL;
-    mongoose.connect(this.DBURI, {useNewUrlParser: true});
+    mongoose.connect(this.DBURI, { useNewUrlParser: true, useCreateIndex: true });
     mongoose
       .connection
       .on('connected', this.log.bind(this, `Mongoose connected to ${this.DBURI}`))
       .on('error', this.log.bind(this, `Mongoose connection error:`))
-      .on('disconnected', this.log.bind(this, `Mongoose connected to ${this.DBURI}`));
+      .on('disconnected', this.log.bind(this, `Mongoose disconnected from ${this.DBURI}`));
   }
 
   private log(message: string, aditionalInfo?: any) {
