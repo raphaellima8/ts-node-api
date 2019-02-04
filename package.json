@@ -5,9 +5,9 @@
   "main": "bootstrap.js",
   "scripts": {
     "start:dev": "ts-node bootstrap.ts",
-    "start": "",
+    "start": "node dist/bootstrap.js",
     "release": "standard-version",
-    "build": "",
+    "build": "tsc -p . && npm start",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "engines": {
