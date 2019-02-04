@@ -3,17 +3,14 @@ import { SettingsHelper } from '../../config/env/settings-helper';
 
 export class Database {
 
-  private DBURI: string = 'mongodb://localhost/martan';
-
   public connect() {
-    const { dbURL } = SettingsHelper.getSettings();
-    this.DBURI = SettingsHelper.isDevMode() ? this.DBURI : dbURL;
-    mongoose.connect(this.DBURI, { useNewUrlParser: true, useCreateIndex: true });
+    const { dbURL, database } = SettingsHelper.getSettings();
+    mongoose.connect(dbURL, { useNewUrlParser: true, useCreateIndex: true });
     mongoose
       .connection
-      .on('connected', this.log.bind(this, `Mongoose connected to ${this.DBURI}`))
+      .on('connected', this.log.bind(this, `Mongoose connected to ${database}`))
       .on('error', this.log.bind(this, `Mongoose connection error:`))
-      .on('disconnected', this.log.bind(this, `Mongoose disconnected from ${this.DBURI}`));
+      .on('disconnected', this.log.bind(this, `Mongoose disconnected from ${database}`));
   }
 
   private log(message: string, aditionalInfo?: any) {
