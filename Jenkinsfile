@@ -22,4 +22,7 @@ pipeline {
       }
     }
   }
+  environment {
+    HOME = '.'
+  }
 }
