@@ -1,7 +1,7 @@
 pipeline {
   agent {
     node {
-      label 'ts-node-api'
+      label '8.9.1'
     }
 
   }
