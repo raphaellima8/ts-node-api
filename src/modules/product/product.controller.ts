@@ -1,5 +1,4 @@
 import { Product } from './product.schema';
-import { Request, Response } from 'express';
 import { ProductModel } from './product.model';
 import { Document } from 'mongoose';
 
@@ -15,10 +14,9 @@ export class ProductController {
   private readonly DEFAULT_PAGE_SIZE: number = 5;
   private readonly DEFAULT_SKIP_DOCS: number = 0;
   private readonly DEFAULT_CURRENT_PAGE: number = 1;
-  private readonly SUCCESS_HTTP_STATUS_CODE: number = 200;
 
-  public async getProducts(req: Request, res: Response) {
-    return res.status(this.SUCCESS_HTTP_STATUS_CODE).send(await this.parseResponse(req.query));
+  public async getProducts(queryParams?: any) {
+    return await this.parseResponse(queryParams);
   }
 
   private async parseResponse(query) {
@@ -67,5 +65,3 @@ export class ProductController {
     }
   }
 }
-
-export default new ProductController();

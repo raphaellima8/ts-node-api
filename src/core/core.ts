@@ -1,7 +1,8 @@
 import express, { Request, Response, Application, NextFunction } from 'express';
 import morgan from 'morgan';
 import bodyParser from 'body-parser';
-import ProductRouter from '../modules/product/product.router';
+import { ModuleFactory } from '../modules/module.factory';
+import { RouterModule } from './router/router';
 
 export class CoreModule {
 
@@ -10,7 +11,7 @@ export class CoreModule {
   constructor() {
     this._express = express();
     this.configExpress();
-    this.exposeEndpoints();
+    new RouterModule(this.express, new ModuleFactory().getInfoFromRegisteredModules());
   }
 
   public get express(): Application {
@@ -22,10 +23,6 @@ export class CoreModule {
     this.express.use(morgan('dev'));
     this.express.use(bodyParser.urlencoded( { extended: true } ));
     this.express.use(bodyParser.json());
-  }
-
-  private exposeEndpoints(): void {
-    ProductRouter.exposeEndpoints(this.express);
   }
 
   private configHeader(req: Request, res: Response, next: NextFunction) {
