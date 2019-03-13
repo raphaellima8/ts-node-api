@@ -1,13 +1,18 @@
-import { Application } from 'express';
-import ProductController from './product.controller';
+import { Request, Response } from 'express';
+import { ProductController } from './product.controller';
+import { BaseRouterModule } from '../router/base-router';
 
-export class ProductRouter {
+export class ProductRouter extends BaseRouterModule {
 
-  private readonly ENDPOINT: string = '/api/v1/products';
+  private productController: ProductController;
 
-  public exposeEndpoints(app: Application) {
-    app.route(this.ENDPOINT).get(ProductController.getProducts.bind(ProductController));
+  constructor() {
+    super('product');
+    this.productController = new ProductController();
+  }
+
+  public async list(req: Request, res: Response) {
+    const data = await this.productController.getProducts(req.query);
+    return res.status(200).send({ data });
   }
 }
-
-export default new ProductRouter();
