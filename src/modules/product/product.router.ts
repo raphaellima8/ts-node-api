@@ -14,6 +14,6 @@ export class ProductRouter extends BaseRouterModule {
 
   public async list(req: Request, res: Response) {
     const data = await this.productController.getProducts(req.query);
-    return res.status(this.HTTP_SUCCESS_CODE).send({ data });
+    return res.status(this.HTTP_SUCCESS_CODE).send({ result: data });
   }
 }
