@@ -3,13 +3,13 @@ import { BaseModel } from '../../core/data-parser/base.model';
 export class ProductModel extends BaseModel {
 
   public name: string;
-  public category: string; 
-  public type: string; 
-  public price: number; 
-  public promotionalPrice?: number; 
-  public images: Array<string>;
+  public category: string;
+  public type: string;
+  public price: number;
+  public promotionalPrice?: number;
+  public images: string[];
 
-  parse(data: any): ProductModel {
+  public parse(data: any): ProductModel {
     this.name = data.name;
     this.category = data.category;
     this.type = data.type;

@@ -40,11 +40,11 @@ export interface BaseRouterMethods {
 }
 
 export interface HttpVerbMap {
-  get ?: Array<string>;
-  post ?: Array<string>;
-  put ?: Array<string>;
-  patch ?: Array<string>;
-  delete ?: Array<string>;
+  get ?: string[];
+  post ?: string[];
+  put ?: string[];
+  patch ?: string[];
+  delete ?: string[];
 }
 
 export interface RegisteredModule {

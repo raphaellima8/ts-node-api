@@ -7,7 +7,7 @@ const productSchema = new mongoose.Schema({
   price: Number,
   promotionalPrice: Number,
   images: []
-})
+});
 
 productSchema.index({name: 'text'});
 

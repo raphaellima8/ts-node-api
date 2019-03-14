@@ -28,16 +28,16 @@ export class ProductController {
       products,
       pages,
       currentPage
-    }
+    };
   }
-  
+
   private parseParams(query): QueryParams {
     const { limit, page, search } = query;
     let itemsPerPage: number = this.DEFAULT_PAGE_SIZE;
     let skip: number = this.DEFAULT_SKIP_DOCS;
     let currentPage: number = this.DEFAULT_CURRENT_PAGE;
     const searchTerm = search ? { name: new RegExp(search, 'i') } : undefined;
-    
+
     if (limit) {
       const parsedLimit = Math.trunc(parseInt(limit));
       itemsPerPage = !Number.isNaN(parsedLimit) ? parsedLimit : itemsPerPage;
@@ -51,17 +51,17 @@ export class ProductController {
 
     return {
       itemsPerPage, skip, currentPage, searchTerm
-    }
+    };
   }
 
   private async execQuery(searchTerm: {[key: string]: RegExp}, skip: number, itemsPerPage: number) {
     const amountDocs: number = await Product.find(searchTerm).countDocuments();
-    const data: Array<Document> = await Product.find(searchTerm).skip(skip).limit(itemsPerPage);
-    const products: Array<ProductModel> = data.map((document: Document) => new ProductModel(document));
+    const data: Document[] = await Product.find(searchTerm).skip(skip).limit(itemsPerPage);
+    const products: ProductModel[] = data.map((document: Document) => new ProductModel(document));
     const amountPages: number = amountDocs <= itemsPerPage ? 1 : (amountDocs / itemsPerPage);
     const pages = Number.isInteger(amountPages) ? amountPages : Math.trunc(amountPages) + 1;
     return {
       pages, amountDocs, products
-    }
+    };
   }
 }

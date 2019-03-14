@@ -13,13 +13,13 @@ export class Database {
       .on('disconnected', this.log.bind(this, `Mongoose disconnected from ${database}`));
   }
 
-  private log(message: string, aditionalInfo?: any) {
-    const msg = (!!message && !!aditionalInfo) ? `${message} ${aditionalInfo}` : `${message}`; 
-    console.log(msg);
-  }
-
   public closeConnection() {
     mongoose.connection.close();
+  }
+
+  private log(message: string, aditionalInfo?: any) {
+    const msg = (!!message && !!aditionalInfo) ? `${message} ${aditionalInfo}` : `${message}`;
+    console.log(msg);
   }
 
 }

@@ -3,10 +3,14 @@ import { RegisteredModule, RouterInfo } from './router/router-definitions';
 
 export class ModuleFactory {
 
-  private routerModulesInfo: Array<RouterInfo> = [];
+  private routerModulesInfo: RouterInfo[] = [];
 
   constructor() {
     this.bootstrapModules();
+  }
+
+  public getInfoFromRegisteredModules(): RouterInfo[] {
+    return this.routerModulesInfo;
   }
 
   private bootstrapModules() {
@@ -14,11 +18,7 @@ export class ModuleFactory {
       this.routerModulesInfo = [
         ...this.routerModulesInfo,
         ...new registeredModule.moduleRef()[registeredModule.parserName]()
-      ]
+      ];
     });
-  }
-
-  public getInfoFromRegisteredModules(): Array<RouterInfo> {
-    return this.routerModulesInfo;
   }
 }
