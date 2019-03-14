@@ -1,5 +1,5 @@
 import { Application } from 'express';
-import { RouterInfo } from '../../modules/router/router-definitions';
+import { RouterInfo } from '../../modules/router/router-info.model';
 
 export class RouterModule {
 
@@ -18,7 +18,6 @@ export class RouterModule {
 
   private mountEndpoint(moduleInfo: RouterInfo) {
     const { auth, endpoint, callback, httpVerb } = moduleInfo;
-    console.log(endpoint);
     auth
       ? this.express.route(endpoint).all(() => {})[httpVerb](callback)
       : this.express.route(endpoint)[httpVerb](callback);

@@ -1,5 +1,6 @@
 import { ModulesMapper } from './router/router-mapper';
-import { RegisteredModule, RouterInfo } from './router/router-definitions';
+import { RegisteredModule } from './router/router-helpers';
+import { RouterInfo } from './router/router-info.model';
 
 export class ModuleFactory {
 

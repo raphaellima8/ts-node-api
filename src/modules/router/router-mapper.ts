@@ -1,4 +1,4 @@
-import { RegisteredModule } from './router-definitions';
+import { RegisteredModule } from './router-helpers';
 import { ProductRouter } from '../product/product.router';
 
 export class ModulesMapper {
