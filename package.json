@@ -7,7 +7,7 @@
     "start:dev": "ts-node bootstrap.ts",
     "start": "node dist/bootstrap.js",
     "release": "standard-version",
-    "build": "tsc -p . && npm start",
+    "build": "tsc -p .",
     "lint": "tslint --project tsconfig.json",
     "lint:fix": "tslint --fix"
   },
