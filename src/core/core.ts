@@ -6,16 +6,16 @@ import { RouterModule } from './router/router';
 
 export class CoreModule {
 
-  private _express: Application;
+  private app: Application;
 
   constructor() {
-    this._express = express();
+    this.app = express();
     this.configExpress();
     new RouterModule(this.express, new ModuleFactory().getInfoFromRegisteredModules());
   }
 
   public get express(): Application {
-    return this._express;
+    return this.app;
   }
 
   private configExpress(): void {

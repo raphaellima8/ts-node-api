@@ -5,6 +5,7 @@ import { BaseRouterModule } from '../router/base-router';
 export class ProductRouter extends BaseRouterModule {
 
   private productController: ProductController;
+  private readonly HTTP_SUCCESS_CODE: number = 200;
 
   constructor() {
     super('product');
@@ -13,6 +14,6 @@ export class ProductRouter extends BaseRouterModule {
 
   public async list(req: Request, res: Response) {
     const data = await this.productController.getProducts(req.query);
-    return res.status(200).send({ data });
+    return res.status(this.HTTP_SUCCESS_CODE).send({ data });
   }
 }

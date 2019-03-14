@@ -26,9 +26,20 @@ export class BaseRouterModule implements BaseRouterMethods {
       this.mountModuleEndpoint();
   }
 
+  public list(req: Request, res: Response) {}
+  public create(req: Request, res: Response) {}
+  public findOne(req: Request, res: Response) {}
+  public update(req: Request, res: Response) {}
+  public remove(req: Request, res: Response) {}
+
   protected mountModuleEndpoint() {
       Object.keys(AvailableActions).forEach(this.mountModuleEndpointProperty.bind(this));
       this.configModuleEndpointByHttpVerb();
+  }
+
+  protected getRouterModuleConfig(): RouterInfo[] {
+    return Object.keys(this.ROUTER_MODULE_INFO)
+      .map((routerModuleInfo) => this.ROUTER_MODULE_INFO[routerModuleInfo]);
   }
 
   private mountModuleEndpointProperty(action: string) {
@@ -46,14 +57,14 @@ export class BaseRouterModule implements BaseRouterMethods {
   }
 
   private configModuleEndpointByHttpVerb() {
-    const httpVerbList: Array<string> = Object.keys(this.actionByHttpVerbMapper);
+    const httpVerbList: string[] = Object.keys(this.actionByHttpVerbMapper);
     httpVerbList
       .forEach((httpVerb: string) => {
-        const actionsByHttpVerb: Array<string> = this.actionByHttpVerbMapper[httpVerb];
+        const actionsByHttpVerb: string[] = this.actionByHttpVerbMapper[httpVerb];
         if (Array.isArray(actionsByHttpVerb)) {
           actionsByHttpVerb.forEach((actionName: string) => {
-            this.ROUTER_MODULE_INFO[actionName]['httpVerb'] = httpVerb;
-            this.ROUTER_MODULE_INFO[actionName]['auth'] = this.shouldAuth(httpVerb);
+            this.ROUTER_MODULE_INFO[actionName].httpVerb = httpVerb;
+            this.ROUTER_MODULE_INFO[actionName].auth = this.shouldAuth(httpVerb);
           });
         }
       });
@@ -62,15 +73,4 @@ export class BaseRouterModule implements BaseRouterMethods {
   private shouldAuth(httpVerb: string): boolean {
     return httpVerb !== 'get';
   }
-
-  protected getRouterModuleConfig(): RouterInfo[] {
-    return Object.keys(this.ROUTER_MODULE_INFO)
-      .map(routerModuleInfo => this.ROUTER_MODULE_INFO[routerModuleInfo]);
-  }
-
-  public list(req: Request, res: Response) {}
-  public create(req: Request, res: Response) {}
-  public findOne(req: Request, res: Response) {}
-  public update(req: Request, res: Response) {}
-  public remove(req: Request, res: Response) {}
 }
