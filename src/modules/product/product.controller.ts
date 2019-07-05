@@ -15,6 +15,10 @@ export class ProductController {
   private readonly DEFAULT_SKIP_DOCS: number = 0;
   private readonly DEFAULT_CURRENT_PAGE: number = 1;
 
+  public async getProduct(productId: string) {
+    return await new ProductModel(await Product.findById(productId));
+  }
+
   public async getProducts(queryParams?: any) {
     return await this.parseResponse(queryParams);
   }
